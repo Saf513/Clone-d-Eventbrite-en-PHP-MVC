@@ -1,6 +1,6 @@
 
 ✔ create docker-compose.yml pour les services php et postgresql @done(25-02-10 12:14)
-☐ create Dockerfile for config php et composer
+✔ create Dockerfile for config php et composer @done(25-02-10 12:29)
 ☐ create .env doc
 ☐ create project structer
 ☐ Vérifier que les services Docker se lancent correctement.
