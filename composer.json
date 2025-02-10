@@ -1,0 +1,15 @@
+{
+    "name": "ali/clone-d-eventbrite-en-php-mvc",
+    "autoload": {
+        "psr-4": {
+            "Ali\\CloneDEventbriteEnPhpMvc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammed Ali Boutaine",
+            "email": "111361086+mohammed-ali-boutaine@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
