@@ -2,7 +2,9 @@
     "name": "ali/clone-d-eventbrite-en-php-mvc",
     "autoload": {
         "psr-4": {
-            "Ali\\CloneDEventbriteEnPhpMvc\\": "src/"
+            "App\\": "app/",
+            "Core\\": "core/"
+
         }
     },
     "authors": [
