@@ -1,4 +1,6 @@
 
-create docker-compose.yml pour les services php et postgresql
-create Dockerfile for config php et composer
-Vérifier que les services Docker se lancent correctement.
+☐ create docker-compose.yml pour les services php et postgresql
+☐ create Dockerfile for config php et composer
+☐ create .env doc
+☐ create project structer
+☐ Vérifier que les services Docker se lancent correctement.
