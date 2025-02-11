@@ -18,7 +18,7 @@ services:
 
   database:
     image: postgres:15
-    container_name: postgres_db_youcode
+    container_name: ${DB_HOST}
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
