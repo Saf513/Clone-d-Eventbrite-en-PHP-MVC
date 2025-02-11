@@ -1,3 +1,12 @@
+
+<?php 
+
+
+$_SESSION["user_id"] = "good";
+$_SESSION["user_email"] = "good@gmail.com";
+$_SESSION['user_role'] = 'user';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
