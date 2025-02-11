@@ -16,6 +16,13 @@ class AuthController extends Controller
      {
           $errors = [];
 
+          if ($_SERVER['REQUEST_METHOD'] != "POST") {
+
+               $this->view('Auth/login');
+
+               return;
+          }
+
           // Validate inputs
           $email = $_POST["email"] ?? null;
           $password = $_POST["password"] ?? null;
@@ -51,6 +58,14 @@ class AuthController extends Controller
 
      public function register()
      {
+
+          if ($_SERVER['REQUEST_METHOD'] != "POST") {
+
+               $this->view('Auth/register');
+
+               return;
+          }
+
           $errors = [];
           $success = [];
 
@@ -68,7 +83,7 @@ class AuthController extends Controller
           // Check if email already exists and return to register page
           if (User::findByEmail($email)) {
                $errors[] = "Email already exists.";
-               $this->view("home/register", ["errors" => $errors]);
+               $this->view("Auth/register", ["errors" => $errors]);
           }
 
 
