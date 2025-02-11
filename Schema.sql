@@ -49,7 +49,7 @@ CREATE TABLE events (
     category_id INT REFERENCES categories(category_id),
     capacity INT,
     price DECIMAL(10, 2),
-    organizer_id INT REFERENCES organizers(user_id), -- Référence à l'organisateur
+    founder_id INT REFERENCES founder(user_id), -- Référence à l'organisateur
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
