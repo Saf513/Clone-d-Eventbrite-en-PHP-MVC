@@ -13,5 +13,16 @@ class Home extends Controller
 
           $this->view('index',["message"=>"hello bubu ali"]);
      }
+
+     public function notFound()
+     {
+
+          $this->view('home/not_found');
+     }
+     public function notAuthorized()
+     {
+
+          $this->view('home/not_authorized');
+     }
  
 }
