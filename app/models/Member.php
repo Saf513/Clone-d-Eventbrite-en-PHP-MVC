@@ -6,10 +6,10 @@ namespace APP\Models;
 class Member extends User
 {
 
-     private $phone_number;
-     private $address;
+     protected $phone_number;
+     protected $address;
 
-     private static string $table = 'member'; // Define table name
+     protected static string $table = 'member'; // Define table name
 
      function __construct($id, $username, $email, $password, $phone_number, $address)
      {
@@ -18,6 +18,7 @@ class Member extends User
 
         $this -> phone_number = $phone_number;
         $this -> address = $address;
+        $this -> role = "participant";
      }
 
      
@@ -44,15 +45,15 @@ class Member extends User
 
     function register(): bool
      {
-          $sql = "INSERT INTO " . self::$table . " (username, email, password, address, phone_number, created_at) VALUES (:username, :email, :password, :address, :phone, NOW())";
+          $sql = "INSERT INTO " . self::$table . " (full_name, email, password, role, address, phone_number, created_at) VALUES (:username, :email, :password, :role, :address, :phone, NOW())";
           $stmt = self::db()->prepare($sql);
           $success = $stmt->execute([
                ':username' => $this->username,
                ':email' => $this->email,
                ':password' => $this->password,
                ':address' => $this->address,
-               ':phone' => $this->phone_number
-
+               ':phone' => $this->phone_number,
+               ':role' => $this->role
           ]);
 
           if ($success) {
@@ -65,7 +66,7 @@ class Member extends User
 
      public function update(): bool
      {
-          $sql = "UPDATE " . self::$table . " SET name = :name, email = :email, address = :address, phone_number = :phone WHERE id = :id";
+          $sql = "UPDATE " . self::$table . " SET full_name = :name, email = :email, address = :address, phone_number = :phone WHERE id = :id";
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([
                ':id' => $this->id,

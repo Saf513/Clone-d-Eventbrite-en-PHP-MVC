@@ -6,9 +6,9 @@ namespace APP\Models;
 class Founder extends User
 {
 
-     private $bio;
+     protected $bio;
 
-     private static string $table = 'founder'; // Define table name
+     protected static string $table = 'founder'; // Define table name
 
      function __construct($id, $username, $email, $password, $bio)
      {
@@ -16,6 +16,7 @@ class Founder extends User
         parent::__construct($id, $username, $email, $password);
 
         $this -> bio = $bio;
+        $this -> role = "organizer";
 
      }
 
@@ -35,13 +36,14 @@ class Founder extends User
 
      public function register(): bool
      {
-          $sql = "INSERT INTO " . self::$table . " (username, email, password, bio, created_at) VALUES (:username, :email, :password, :bio, NOW())";
+          $sql = "INSERT INTO " . self::$table . " (full_name, email, password, role, bio, created_at) VALUES (:username, :email, :password, :role, :bio, NOW())";
           $stmt = self::db()->prepare($sql);
           $success = $stmt->execute([
                ':username' => $this->username,
                ':email' => $this->email,
                ':password' => $this->password,
-               ':bio' => $this->bio
+               ':bio' => $this->bio,
+               ':role' => $this->role
 
           ]);
 
@@ -55,7 +57,7 @@ class Founder extends User
 
      public function update(): bool
      {
-          $sql = "UPDATE " . self::$table . " SET name = :name, email = :email, bio = :bio WHERE id = :id";
+          $sql = "UPDATE " . self::$table . " SET full_name = :name, email = :email, bio = :bio WHERE id = :id";
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([
                ':id' => $this->id,

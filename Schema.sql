@@ -1,7 +1,3 @@
---creation de database 
-create database event;
-
-
 --creation de tableau de users COMMENT
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
@@ -16,7 +12,7 @@ CREATE TABLE users (
 
 --table founder herite de tableau  users
 CREATE TABLE founder (
-    bio TEXT,
+    bio TEXT
 ) INHERITS (users);
 
 --table member herite de tableau users 

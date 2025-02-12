@@ -59,22 +59,21 @@ class AuthController extends Controller
 
      public function register()
      {
+          $this->view('Auth/register');
 
-          if ($_SERVER['REQUEST_METHOD'] != "POST") {
+     }
 
-               $this->view('Auth/register');
-
-               return;
-          }
+     public function handleRegister()
+     {
 
           $errors = [];
           $success = [];
 
           // Validate inputs
-          $full_name = $_POST["full-name"] ?? null;
+          $full_name = $_POST["full_name"] ?? null;
           $email = $_POST["email"] ?? null;
           $password = $_POST["password"] ?? null;
-          $account_type = $_POST["account-type"] ?? null;
+          $account_type = $_POST["account_type"] ?? null;
 
           if (empty($email) | empty($full_name) | empty($password) | empty($account_type)) {
                $errors[] = "All fields are required.";
@@ -102,7 +101,7 @@ class AuthController extends Controller
           }
 
           if ($user->register()) {
-               $success[] = "User Created Succcsfly";
+               $success[] = "User Created Successfully";
           }
           // Store user session
           $_SESSION["user_id"] = $user->getId();
