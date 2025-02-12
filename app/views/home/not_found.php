@@ -96,7 +96,7 @@
         </p>
         <a href="/" class="error-button">Find Events</a>
     </main>
-
+<?php var_dump($_SESSION)?>;
     <footer class="footer">
         © 2025 Eventbrite
     </footer>

@@ -11,7 +11,7 @@ class Home extends Controller
      public function index()
      {
 
-          $this->view('index',["message"=>"hello bubu ali"]);
+          $this->view('index.php',["message"=>"hello bubu ali"]);
      }
 
      public function notFound()

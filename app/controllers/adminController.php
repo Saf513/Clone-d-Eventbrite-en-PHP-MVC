@@ -3,13 +3,13 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use \App\Models\User;
+use App\Models\User;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        $this->view('Admin/index');
+        $this->view('admin/dashboard');
     }
 
     public function manageUsers()
@@ -37,7 +37,7 @@ class AdminController extends Controller
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'] ?? '';
             $email = $_POST['email'] ?? '';
 
@@ -61,7 +61,7 @@ class AdminController extends Controller
 
     public function createUser()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'] ?? '';
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
@@ -109,7 +109,7 @@ class AdminController extends Controller
 
         $userModel = new User($user['id'], $user['username'], $user['email'], $user['password']);
         if (method_exists($userModel, 'setRole')) {
-            $userModel->setRole('admin'); // Assuming a setRole method exists in User model
+            $userModel->setRole('admin');
             if ($userModel->save()) {
                 header("Location: /admin/manage-users?success=User+promoted+to+admin");
             } else {
@@ -132,7 +132,7 @@ class AdminController extends Controller
 
         $userModel = new User($user['id'], $user['username'], $user['email'], $user['password']);
         if (method_exists($userModel, 'setRole')) {
-            $userModel->setRole('user'); // Demoting the user to a regular role
+            $userModel->setRole('user');
             if ($userModel->save()) {
                 header("Location: /admin/manage-users?success=User+demoted+to+regular+user");
             } else {
@@ -142,5 +142,37 @@ class AdminController extends Controller
             header("Location: /admin/manage-users?error=Method+setRole+not+available");
         }
         exit;
+    }
+
+    public function resetUserPassword($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            header("Location: /admin/manage-users?error=User+not+found");
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newPassword = $_POST['password'] ?? '';
+
+            if (empty($newPassword)) {
+                $errors = ['Password field is required'];
+                return $this->view('Admin/reset_password', ['user' => $user, 'errors' => $errors]);
+            }
+
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+            $user['password'] = $hashedPassword;
+
+            $userModel = new User($user['id'], $user['username'], $user['email'], $user['password']);
+            if ($userModel->save()) {
+                header("Location: /admin/manage-users?success=Password+reset+successfully");
+            } else {
+                header("Location: /admin/manage-users?error=Failed+to+reset+password");
+            }
+            exit;
+        }
+
+        $this->view('Admin/reset_password', ['user' => $user]);
     }
 }

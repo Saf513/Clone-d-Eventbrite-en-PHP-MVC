@@ -18,7 +18,7 @@ class AuthController extends Controller
 
           if ($_SERVER['REQUEST_METHOD'] != "POST") {
 
-               $this->view('Auth/login');
+               $this->view('../app/views/Auth/login.php');
 
                return;
           }
@@ -27,7 +27,6 @@ class AuthController extends Controller
           $email = $_POST["email"] ?? null;
           $password = $_POST["password"] ?? null;
 
-var_dump($email , $password);
           if (empty($email) || empty($password)) {
                $errors[] = "All fields are required.";
                return $this->view("home/login", ["errors" => $errors]);
