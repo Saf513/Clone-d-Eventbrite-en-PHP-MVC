@@ -27,7 +27,7 @@ class AuthController extends Controller
           $email = $_POST["email"] ?? null;
           $password = $_POST["password"] ?? null;
 
-
+var_dump($email , $password);
           if (empty($email) || empty($password)) {
                $errors[] = "All fields are required.";
                return $this->view("home/login", ["errors" => $errors]);
@@ -52,7 +52,7 @@ class AuthController extends Controller
           $_SESSION["user_role"] = $user->getRole();
 
           // Redirect after successful login
-          header("Location: /dashboard");
+          header("Location: /admin/dashboard");
           exit;
      }
 

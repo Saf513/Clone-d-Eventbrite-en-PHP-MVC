@@ -60,6 +60,12 @@ class User extends Model
         $this->email = $email;
     }
 
+    function setRole(string $role): void
+    {
+
+        $this->email = $role;
+    }
+
      public function save(): bool
      {
           return $this->id ? $this->update() : $this->insert();

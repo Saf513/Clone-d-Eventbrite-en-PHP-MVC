@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $this->view('/app/views/admin/dashboar.twig');
+        $this->view('Admin/index');
     }
 
     public function manageUsers()
@@ -84,5 +84,63 @@ class AdminController extends Controller
         }
 
         $this->view('Admin/create_user');
+    }
+
+    public function viewUser($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            header("Location: /admin/manage-users?error=User+not+found");
+            exit;
+        }
+
+        $this->view('Admin/view_user', ['user' => $user]);
+    }
+
+    public function promoteUser($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            header("Location: /admin/manage-users?error=User+not+found");
+            exit;
+        }
+
+        $userModel = new User($user['id'], $user['username'], $user['email'], $user['password']);
+        if (method_exists($userModel, 'setRole')) {
+            $userModel->setRole('admin'); // Assuming a setRole method exists in User model
+            if ($userModel->save()) {
+                header("Location: /admin/manage-users?success=User+promoted+to+admin");
+            } else {
+                header("Location: /admin/manage-users?error=Failed+to+promote+user");
+            }
+        } else {
+            header("Location: /admin/manage-users?error=Method+setRole+not+available");
+        }
+        exit;
+    }
+
+    public function demoteUser($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            header("Location: /admin/manage-users?error=User+not+found");
+            exit;
+        }
+
+        $userModel = new User($user['id'], $user['username'], $user['email'], $user['password']);
+        if (method_exists($userModel, 'setRole')) {
+            $userModel->setRole('user'); // Demoting the user to a regular role
+            if ($userModel->save()) {
+                header("Location: /admin/manage-users?success=User+demoted+to+regular+user");
+            } else {
+                header("Location: /admin/manage-users?error=Failed+to+demote+user");
+            }
+        } else {
+            header("Location: /admin/manage-users?error=Method+setRole+not+available");
+        }
+        exit;
     }
 }
