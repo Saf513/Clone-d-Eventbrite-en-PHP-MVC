@@ -21,12 +21,12 @@ class Controller {
 
     protected function view(string $view, array $data = []): void {
         try {
-            echo $this->twig->render($view . '.twig', $data);
+            echo $this->twig->render($view . '.php', $data);
         } catch (\Exception $e) {
             // Log l'erreur
             error_log($e->getMessage());
             // Afficher une page d'erreur
-            echo $this->twig->render('errors/500.twig', [
+            echo $this->twig->render('home/not_found.php', [
                 'error' => $e->getMessage()
             ]);
         }

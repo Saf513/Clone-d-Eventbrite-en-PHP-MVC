@@ -16,7 +16,7 @@ class AuthController extends Controller
 
      public function login()
      {
-          $this->view('Auth/login');
+          $this->view('/app/views/Auth/login');
      }
 
      public function handleLogin()
