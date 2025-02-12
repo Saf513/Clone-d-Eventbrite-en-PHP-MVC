@@ -21,6 +21,8 @@ Router::get('not-authorized', 'Home@notAuthorized');
 Router::get('dashboard', 'DashboardController@index', [AuthMiddleware::class, UserMiddleware::class]);
 Router::get('admin', 'DashboardController@index', [AuthMiddleware::class, AdminMiddleware::class]); 
 Router::get('founder', 'DashboardController@index', [AuthMiddleware::class, FounderMiddleware::class]); 
+Router::get('admin', 'AdminController@index', [AuthMiddleware::class, AdminMiddleware::class]);
+
 
 
 Router::dispatch($_SERVER['REQUEST_URI']);

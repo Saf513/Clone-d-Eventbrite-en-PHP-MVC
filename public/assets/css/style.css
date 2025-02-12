@@ -1,0 +1,12 @@
+/* Ajoutez ici des styles personnalisés si nécessaire */
+
+/* Couleur or personnalisée pour le texte */
+.text-gold-500 {
+    color: #D4AF37; /* Or */
+  }
+  .bg-gold-500 {
+    background-color: #D4AF37; /* Or */
+  }
+  .bg-gold-700 {
+    background-color: #B8952F; /* Or plus foncé (hover) */
+  }
