@@ -16,14 +16,12 @@ class AuthController extends Controller
 
      public function login()
      {
+          $this->view('Auth/login');
+     }
+
+     public function handleLogin()
+     {
           $errors = [];
-
-          if ($_SERVER['REQUEST_METHOD'] != "POST") {
-
-               $this->view('Auth/login');
-
-               return;
-          }
 
           // Validate inputs
           $email = $_POST["email"] ?? null;
@@ -31,29 +29,32 @@ class AuthController extends Controller
 
           if (empty($email) || empty($password)) {
                $errors[] = "All fields are required.";
-               return $this->view("home/login", ["errors" => $errors]);
+               return $this->view("Auth/login", ["errors" => $errors]);
           }
           // Check if email already exists and return to register page
 
           $user = User::findByEmail($email);
           if (!$user) {
                $errors[] = "This email does not exist. Please register.";
-               return $this->view("home/register", ["errors" => $errors]);
+               return $this->view("Auth/register", ["errors" => $errors]);
           }
-          $user = new User($user["id"], $user["email"], $user["username"], $user["password"], $user["role"]);
+
+          $role = $user['role'];
+
+          $user = new User($user["user_id"], $user["full_name"], $user["email"], $user["password"]);
           // Verify password
           if (!password_verify($password, $user->getPassword())) {
                $errors[] = "Invalid password.";
-               return $this->view("home/login", ["errors" => $errors]);
+               return $this->view("Auth/login", ["errors" => $errors]);
           }
 
           // Store session
           $_SESSION["user_id"] = $user->getId();
           $_SESSION["user_email"] = $user->getEmail();
-          $_SESSION["user_role"] = $user->getRole();
+          $_SESSION["user_role"] = $role;
 
           // Redirect after successful login
-          header("Location: /admin/dashboard");
+          header("Location: /");
           exit;
      }
 

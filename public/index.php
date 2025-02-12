@@ -25,6 +25,7 @@ Router::get('admin', 'AdminController@index', [AuthMiddleware::class, AdminMiddl
 
 
 Router::post('register', 'AuthController@handleRegister');
+Router::post('login', 'AuthController@handleLogin');
 
 Router::dispatch($_SERVER['REQUEST_URI']);
 
