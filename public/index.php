@@ -14,6 +14,7 @@ use App\Middleware\UserMiddleware;
 Router::get('', 'Home@index');
 Router::get('login', 'AuthController@login');
 Router::get('register', 'AuthController@register');
+Router::get('logout', 'AuthController@logout');
 Router::get('not-found', 'Home@notFound');
 Router::get('not-authorized', 'Home@notAuthorized');
 Router::get('admin', 'AdminController@index');
@@ -26,6 +27,8 @@ Router::get('founder', 'DashboardController@index', [AuthMiddleware::class, Foun
 // Router::get('admin', 'AdminController@index', [AuthMiddleware::class, AdminMiddleware::class]);
 
 
+Router::post('register', 'AuthController@handleRegister');
+Router::post('login', 'AuthController@handleLogin');
 
 Router::dispatch($_SERVER['REQUEST_URI']);
 
