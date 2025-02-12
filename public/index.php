@@ -14,6 +14,7 @@ use App\Middleware\UserMiddleware;
 Router::get('', 'Home@index');
 Router::get('login', 'AuthController@login');
 Router::get('register', 'AuthController@register');
+Router::get('logout', 'AuthController@logout');
 Router::get('not-found', 'Home@notFound');
 Router::get('not-authorized', 'Home@notAuthorized');
 

@@ -113,4 +113,10 @@ class AuthController extends Controller
           header("Location: /");
           exit;
      }
+
+     public function logout()
+     {
+          session_destroy();
+          header('Location: /');
+     }
 }
