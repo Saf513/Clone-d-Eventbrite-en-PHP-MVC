@@ -1,0 +1,11 @@
+<?php
+
+
+namespace APP\Models;
+
+class Admin extends User
+{
+
+     private static string $table = 'admins'; // Define table name
+    
+}

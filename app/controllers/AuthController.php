@@ -5,6 +5,8 @@ namespace App\Controllers;
 use Core\Controller;
 
 use \App\Models\User;
+use \App\Models\Member;
+use \App\Models\Founder;
 
 
 
@@ -27,7 +29,6 @@ class AuthController extends Controller
           $email = $_POST["email"] ?? null;
           $password = $_POST["password"] ?? null;
 
-var_dump($email , $password);
           if (empty($email) || empty($password)) {
                $errors[] = "All fields are required.";
                return $this->view("home/login", ["errors" => $errors]);
@@ -70,11 +71,12 @@ var_dump($email , $password);
           $success = [];
 
           // Validate inputs
+          $full_name = $_POST["full-name"] ?? null;
           $email = $_POST["email"] ?? null;
-          $username = $_POST["username"] ?? null;
           $password = $_POST["password"] ?? null;
+          $account_type = $_POST["account-type"] ?? null;
 
-          if (empty($email) | empty($username) | empty($password)) {
+          if (empty($email) | empty($full_name) | empty($password) | empty($account_type)) {
                $errors[] = "All fields are required.";
           }
 
@@ -89,8 +91,17 @@ var_dump($email , $password);
 
 
           $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-          $user = new User(null, $email, $username, $hashed_password);
-          if ($user->save()) {
+
+          if ($account_type == "founder") {
+               $bio = $_POST["bio"] ?? null;
+               $user = new Founder(null, $full_name, $email, $hashed_password, $bio);
+          } else {
+               $phone_number = $_POST["phone"] ?? null;
+               $address = $_POST["address"] ?? null;
+               $user = new Member(null, $full_name, $email, $hashed_password, $phone_number, $address);
+          }
+
+          if ($user->register()) {
                $success[] = "User Created Succcsfly";
           }
           // Store user session
@@ -99,7 +110,7 @@ var_dump($email , $password);
           $_SESSION["user_role"] = $user->getRole();
           // Redirect after successful registration
 
-          header("Location: /dashboard");
+          header("Location: /");
           exit;
      }
 }
