@@ -14,6 +14,7 @@ class User extends Model
      protected $email;
      protected $password;
      protected $role;
+     protected $avatar;
 
      protected static string $table = 'users'; // Define table name
 
@@ -92,12 +93,13 @@ class User extends Model
 
      private function update(): bool
      {
-          $sql = "UPDATE " . self::$table . " SET name = :name, email = :email WHERE id = :id";
+          $sql = "UPDATE " . self::$table . " SET avatar = :avatar, full_name = :full_name, email = :email WHERE id = :id";
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([
                ':id' => $this->id,
-               ':name' => $this->username,
-               ':email' => $this->email
+               ':full_name' => $this->username,
+               ':email' => $this->email,
+               ':avatar' => $this->avatar
           ]);
      }
 
@@ -106,6 +108,16 @@ class User extends Model
           $sql = "SELECT * FROM " . self::$table . " WHERE email = :email";
           $stmt = self::db()->prepare($sql);
           $stmt->execute([':email' => $email]);
+          $result = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+          return $result ?: false;
+     }
+
+     static public function findById(int $id)
+     {
+          $sql = "SELECT * FROM " . self::$table . " WHERE id = :id";
+          $stmt = self::db()->prepare($sql);
+          $stmt->execute([':id' => $id]);
           $result = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 
           return $result ?: false;

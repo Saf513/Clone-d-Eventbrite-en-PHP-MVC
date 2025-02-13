@@ -18,6 +18,8 @@ Router::get('logout', 'AuthController@logout');
 Router::get('not-found', 'Home@notFound');
 Router::get('not-authorized', 'Home@notAuthorized');
 
+Router::get('profile', 'Profile@index');
+Router::get('profile/update', 'Profile@update', [AuthMiddleware::class]);
 
 Router::get('dashboard', 'DashboardController@index', [AuthMiddleware::class, UserMiddleware::class]);
 Router::get('admin', 'DashboardController@index', [AuthMiddleware::class, AdminMiddleware::class]); 
