@@ -10,7 +10,10 @@ class DashboardController extends Controller
      public function index()
      {
 
-          $this->view('Dashboard/index',);
+          if ($_SESSION['user_role'] == 'participant') {
+               $this->view('Dashboard/member');
+          }
+          
      }
  
 }
