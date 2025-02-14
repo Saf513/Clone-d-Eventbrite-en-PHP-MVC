@@ -93,10 +93,10 @@ class User extends Model
 
      private function update(): bool
      {
-          $sql = "UPDATE " . self::$table . " SET avatar = :avatar, full_name = :full_name, email = :email WHERE id = :id";
+          $sql = "UPDATE " . self::$table . " SET avatar = :avatar, full_name = :full_name, email = :email WHERE user_id = :user_id";
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([
-               ':id' => $this->id,
+               ':user_id' => $this->id,
                ':full_name' => $this->username,
                ':email' => $this->email,
                ':avatar' => $this->avatar
@@ -115,9 +115,9 @@ class User extends Model
 
      static public function findById(int $id)
      {
-          $sql = "SELECT * FROM " . self::$table . " WHERE id = :id";
+          $sql = "SELECT * FROM " . self::$table . " WHERE user_id = :user_id";
           $stmt = self::db()->prepare($sql);
-          $stmt->execute([':id' => $id]);
+          $stmt->execute([':user_id' => $id]);
           $result = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 
           return $result ?: false;
@@ -126,8 +126,8 @@ class User extends Model
 
      static public function deleteUser($id)
      {
-          $sql = "DELETE FROM " . self::$table . " WHERE id = :id";
+          $sql = "DELETE FROM " . self::$table . " WHERE user_id = :user_id";
           $stmt = self::db()->prepare($sql);
-          return $stmt->execute([':id' => $id]);
+          return $stmt->execute([':user_id' => $id]);
      }
 }
