@@ -76,4 +76,25 @@ class ProfileController extends Controller
             return $this->view("profile/update", ["errors" => $errors]);
         }
     }
+
+    // check role
+    // public function checkRole()
+    // {
+    //     $user = $_SESSION['user_id'] ?? null;
+        
+
+    //     if (!$user) {
+    //         die("User not found.");
+    //     }
+
+    //     if ($user === "admin") {
+    //         $this->view('profile/admin');
+    //     } else if ($user === "participant") {
+    //         $this->view('profile/participant');
+    //     } else if ($user === "organizer") {
+    //         $this->view('profile/organizer');
+    //     } else {
+    //         die("Invalid role.");
+    //     }
+    // }
 }
