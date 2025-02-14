@@ -7,17 +7,34 @@ use App\Models\User;
 class ProfileController extends Controller
 {
     public function index()
-{
-    $currentUserId = $_SESSION['user_id'] ?? null;
-    $user = User::findById($currentUserId);
+    {
+        $currentUserId = $_SESSION['user_id'] ?? null;
+        $user = User::findById($currentUserId);
 
-    if (!$user) {
-        die("User not found.");
+        if (!$user) {
+            die("User not found.");
+        }
+
+        // Get additional data based on role
+        $additionalData = [];
+        if ($user['role'] === 'member') {
+            $memberData = User::findMemberData($currentUserId);
+            $additionalData = [
+                'phone_number' => $memberData['phone_number'] ?? '',
+                'address' => $memberData['address'] ?? ''
+            ];
+        } elseif ($user['role'] === 'founder') {
+            $founderData = User::findFounderData($currentUserId);
+            $additionalData = [
+                'bio' => $founderData['bio'] ?? ''
+            ];
+        }
+
+        $this->view('profile/index', [
+            'user' => $user,
+            'additionalData' => $additionalData
+        ]);
     }
-
-    $this->view('profile/index', ['user' => $user]);
-}
-
 
     private function getPostValue($key)
     {
@@ -31,70 +48,32 @@ class ProfileController extends Controller
 
     public function handleUpdate()
     {
-        // Validate inputs
-        $username = $this->getPostValue("username");
-        $email = $this->getPostValue("email");
-        $password = $this->getPostValue("password");
-        $avatar = $this->getPostValue("avatar");
-
-
-        // check if all fields are filled
-        if (trim($username) === '' || trim($email) === '' || trim($password) === '' || trim($avatar) === '') {
-            $errors[] = "All fields are required.";
-            return $this->view("profile/update", ["errors" => $errors]);
-        }
-
-
-        // check email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = "Invalid email format.";
-            return $this->view("profile/update", ["errors" => $errors]);
-        }
-
-
         $currentUserId = $_SESSION['user_id'] ?? null;
-        $user = User::findByEmail($email);
-        if ($user && $user->id !== $currentUserId) {
-            $errors[] = "This email already exists.";
-            return $this->view("profile/update", ["errors" => $errors]);
+        $user = User::findById($currentUserId);
+
+        if (!$user) {
+            die("User not found.");
         }
 
-        $user = User::findById($currentUserId);
-        if ($user) {
-            $user->username = $username;
-            $user->email = $email;
-            $user->password = $password;
-            if ($user->save()) {
-                header("Location: /profile?success=Profile+updated+successfully");
-                exit;
-            } else {
-                $errors[] = "Failed to update profile.";
-                return $this->view("profile/update", ["errors" => $errors]);
-            }
+        $full_name = $this->getPostValue("full_name");
+        
+        // Update role-specific data
+        if ($user['role'] === 'member') {
+            $phone_number = $this->getPostValue("phone_number");
+            $address = $this->getPostValue("address");
+            User::updateMemberData($currentUserId, $phone_number, $address);
+        } elseif ($user['role'] === 'founder') {
+            $bio = $this->getPostValue("bio");
+            User::updateFounderData($currentUserId, $bio);
+        }
+
+        // Update common data
+        if ($user->updateFullName($full_name)) {
+            header("Location: /profile?success=Profile+updated+successfully");
+            exit;
         } else {
-            $errors[] = "User not found.";
-            return $this->view("profile/update", ["errors" => $errors]);
+            $errors[] = "Failed to update profile.";
+            return $this->view("profile/index", ["errors" => $errors]);
         }
     }
-
-    // check role
-    // public function checkRole()
-    // {
-    //     $user = $_SESSION['user_id'] ?? null;
-        
-
-    //     if (!$user) {
-    //         die("User not found.");
-    //     }
-
-    //     if ($user === "admin") {
-    //         $this->view('profile/admin');
-    //     } else if ($user === "participant") {
-    //         $this->view('profile/participant');
-    //     } else if ($user === "organizer") {
-    //         $this->view('profile/organizer');
-    //     } else {
-    //         die("Invalid role.");
-    //     }
-    // }
 }

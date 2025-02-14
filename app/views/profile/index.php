@@ -219,24 +219,34 @@
 
     <main>
         <h1 style="text-align: center; margin-top: 100px;">Profile</h1>
-        <form action="#" class="profile-form">
+        <form action="/profile/update" method="POST" class="profile-form">
             <legend>Personal Information</legend>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="<?= $user["full_name"] ?>" readonly>
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" value="<?= htmlspecialchars($user["full_name"]) ?>" readonly>
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?= $user["email"] ?>" readonly>
+            <input type="email" id="email" name="email" value="<?= htmlspecialchars($user["email"]) ?>" readonly disabled>
 
             <label for="role">Role</label>
-            <input type="text" id="role" name="role" value="<?= $user["role"] ?>" readonly>
+            <input type="text" id="role" name="role" value="<?= htmlspecialchars($user["role"]) ?>" readonly disabled>
+
+            <?php if ($user["role"] === "member"): ?>
+                <label for="phone_number">Phone Number</label>
+                <input type="text" id="phone_number" name="phone_number" 
+                    value="<?= htmlspecialchars($additionalData["phone_number"] ?? '') ?>" readonly>
+
+                <label for="address">Address</label>
+                <textarea id="address" name="address" readonly><?= htmlspecialchars($additionalData["address"] ?? '') ?></textarea>
+            <?php endif; ?>
+
+            <?php if ($user["role"] === "founder"): ?>
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" readonly><?= htmlspecialchars($additionalData["bio"] ?? '') ?></textarea>
+            <?php endif; ?>
         </form>
 
-        <a href="#" class="update-profile">
-            Update Profile
-        </a>
-        <a href="#" class="save-profile" style="display: none;">
-            Save Profile
-        </a>
+        <a href="#" class="update-profile">Update Profile</a>
+        <a href="#" class="save-profile" style="display: none;">Save Profile</a>
     </main>
 
     <script>
@@ -247,19 +257,29 @@
 
         document.querySelector('.update-profile').addEventListener('click', function(event) {
             event.preventDefault();
-            var inputs = document.querySelectorAll('.profile-form input:not(#role)');
-            inputs.forEach(function(input) {
-                input.removeAttribute('readonly');
-            });
+            // Enable editing for editable fields only
+            document.getElementById('full_name').removeAttribute('readonly');
+            
+            if (document.getElementById('phone_number')) {
+                document.getElementById('phone_number').removeAttribute('readonly');
+            }
+            if (document.getElementById('address')) {
+                document.getElementById('address').removeAttribute('readonly');
+            }
+            if (document.getElementById('bio')) {
+                document.getElementById('bio').removeAttribute('readonly');
+            }
+            
             document.querySelector('.save-profile').style.display = 'block';
         });
 
         document.querySelector('.save-profile').addEventListener('click', function(event) {
             event.preventDefault();
-            // Add your save logic here
-            alert('Profile saved!');
+            // Submit the form
+            document.querySelector('.profile-form').submit();
         });
     </script>
+
 </body>
 
 </html>

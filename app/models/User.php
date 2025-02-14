@@ -130,4 +130,36 @@ class User extends Model
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([':user_id' => $id]);
      }
+
+     public static function findMemberData($userId) {
+          $db = self::db();
+          $stmt = $db->prepare('SELECT phone_number, address FROM member WHERE user_id = ?');
+          $stmt->execute([$userId]);
+          return $stmt->fetch();
+     }
+
+     public static function findFounderData($userId) {
+          $db = self::db();
+          $stmt = $db->prepare('SELECT bio FROM founder WHERE user_id = ?');
+          $stmt->execute([$userId]);
+          return $stmt->fetch();
+     }
+
+     public static function updateMemberData($userId, $phone_number, $address) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE member SET phone_number = ?, address = ? WHERE user_id = ?');
+          return $stmt->execute([$phone_number, $address, $userId]);
+     }
+
+     public static function updateFounderData($userId, $bio) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE founder SET bio = ? WHERE user_id = ?');
+          return $stmt->execute([$bio, $userId]);
+     }
+
+     public function updateFullName($full_name) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE users SET full_name = ? WHERE user_id = ?');
+          return $stmt->execute([$full_name, $this->id]); // Note: changed this->user_id to this->id
+     }
 }

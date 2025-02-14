@@ -20,7 +20,7 @@ Router::get('not-found', 'Home@notFound');
 Router::get('not-authorized', 'Home@notAuthorized');
 
 Router::get('profile','ProfileController@index', [AuthMiddleware::class]);
-// Router::get('profile/update', 'ProfileController@update', [AuthMiddleware::class]);
+Router::get('profile/update', 'ProfileController@update', [AuthMiddleware::class]);
 
 Router::get('dashboard', 'DashboardController@index', [AuthMiddleware::class, UserMiddleware::class]);
 Router::get('admin', 'DashboardController@index', [AuthMiddleware::class, AdminMiddleware::class]); 
