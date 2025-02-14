@@ -7,6 +7,7 @@ use Core\Controller;
 use \App\Models\User;
 use \App\Models\Member;
 use \App\Models\Founder;
+use \App\Models\Notification;
 
 
 
@@ -104,6 +105,10 @@ class AuthController extends Controller
 
           if ($user->register()) {
                $success[] = "User Created Successfully";
+
+               // Notify By Email
+               $notification = new Notification();
+               $notification -> notify($user->getEmail(), "Account Creation", "Hello {$user->getUsername()}, <br> Thank you for joinning us. This email is just to confirm that we have successfully created your account.<br><br><b>EventBrite Team</b>");
           }
           // Store user session
           $_SESSION["user_id"] = $user->getId();
