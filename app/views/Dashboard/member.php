@@ -148,7 +148,7 @@
 
 
     <!-- Main Dashboard Container -->
-    <div class="min-h-screen flex flex-col pt-16">
+    <div class="min-h-screen flex flex-col pt-20">
 
         <!-- Main Content -->
         <div class="flex-grow p-6 space-y-6">
@@ -159,19 +159,19 @@
                 <!-- Total Reservations -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold text-gray-700">Total Reservations</h3>
-                    <p class="mt-2 text-4xl font-bold text-indigo-600">7</p>
+                    <p class="mt-2 text-4xl font-bold text-indigo-600"><?php echo $data['stats'][0]['total_events']; ?></p>
                 </div>
 
                 <!-- Upcoming Events -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold text-gray-700">Upcoming Booked Events</h3>
-                    <p class="mt-2 text-4xl font-bold text-indigo-600">3</p>
+                    <p class="mt-2 text-4xl font-bold text-indigo-600"><?php echo $data['stats'][0]['coming_events']; ?></p>
                 </div>
 
                 <!-- Total Canceled Reservations -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold text-gray-700">Canceled Reservations</h3>
-                    <p class="mt-2 text-4xl font-bold text-indigo-600">2</p>
+                    <p class="mt-2 text-4xl font-bold text-indigo-600"><?php echo $data['stats'][0]['canceled_events']; ?></p>
                 </div>
 
             </div>
@@ -188,7 +188,7 @@
                 <!-- Total Money Spent -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold text-gray-700">Total Money Spent</h3>
-                    <p class="mt-2 text-4xl font-bold text-indigo-600">$1,200</p>
+                    <p class="mt-2 text-4xl font-bold text-indigo-600">$<?php echo $data['stats'][0]['total_amount'] ? $data['stats'][0]['total_amount'] : 0; ?></p>
                 </div>
 
             </div>
@@ -208,57 +208,22 @@
             <!-- Event History List -->
             <div class="bg-white p-6 rounded-lg shadow-md space-y-2">
 
-                <!-- Event 1 -->
-                <div class="flex justify-between items-center p-5 border-b">
-                    <div>
-                        <h4 class="text-xl font-semibold text-indigo-600 mb-3">Music Festival 2025</h4>
-                        <p class="text-gray-600">Date: March 22, 2025</p>
-                        <p class="text-gray-600">Location: Madison Square Garden, New York</p>
-                        <p class="text-gray-600">Category: Music</p>
-                    </div>
-                    <div>
-                        <span class="text-sm font-medium text-green-600">Completed</span>
-                    </div>
-                </div>
 
-                <!-- Event 2 -->
-                <div class="flex justify-between items-center p-5 border-b">
-                    <div>
-                        <h4 class="text-xl font-semibold text-indigo-600 mb-3">Tech Conference 2025</h4>
-                        <p class="text-gray-600">Date: April 10, 2025</p>
-                        <p class="text-gray-600">Location: Silicon Valley Conference Center</p>
-                        <p class="text-gray-600">Category: Technology</p>
-                    </div>
-                    <div>
-                        <span class="text-sm font-medium text-red-600">Canceled</span>
-                    </div>
-                </div>
+                <?php foreach($data['history'] as $item): ?>
 
-                <!-- Event 3 -->
-                <div class="flex justify-between items-center p-5 border-b">
-                    <div>
-                        <h4 class="text-xl font-semibold text-indigo-600 mb-3">Cooking Workshop</h4>
-                        <p class="text-gray-600">Date: April 25, 2025</p>
-                        <p class="text-gray-600">Location: Culinary Arts Academy</p>
-                        <p class="text-gray-600">Category: Cooking</p>
+                    <div class="flex justify-between items-center p-5">
+                        <div>
+                            <h4 class="text-xl font-semibold text-indigo-600 mb-3"><?php echo $item['title']; ?></h4>
+                            <p class="text-gray-600">Date: <?php echo explode(' ', $item['date'])[0]; ?></p>
+                            <p class="text-gray-600">Location: <?php echo $item['location']; ?></p>
+                            <p class="text-gray-600">Category: <?php echo $item['category_name']; ?></p>
+                        </div>
+                        <div>
+                            <span class="text-sm font-medium <?php echo $item['event_status'] == "Completed" ? "text-green-600" : "text-gray-600"; ?>"><?php echo $item['event_status']; ?></span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-sm font-medium text-blue-600">Attended</span>
-                    </div>
-                </div>
 
-                <!-- Event 4 -->
-                <div class="flex justify-between items-center p-5 border-b">
-                    <div>
-                        <h4 class="text-xl font-semibold text-indigo-600 mb-3">Yoga Retreat 2025</h4>
-                        <p class="text-gray-600">Date: May 5, 2025</p>
-                        <p class="text-gray-600">Location: Mountain Retreat, Colorado</p>
-                        <p class="text-gray-600">Category: Yoga</p>
-                    </div>
-                    <div>
-                        <span class="text-sm font-medium text-gray-500">Pending</span>
-                    </div>
-                </div>
+                <?php endforeach; ?>
 
             </div>
         </div>
