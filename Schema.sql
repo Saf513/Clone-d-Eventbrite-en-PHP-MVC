@@ -15,11 +15,15 @@ CREATE TABLE founder (
     bio TEXT
 ) INHERITS (users);
 
+ALTER TABLE founder ADD PRIMARY KEY (user_id);
+
 --table member herite de tableau users 
 CREATE TABLE member (
     phone_number VARCHAR(20),
     address TEXT
 ) INHERITS (users);
+
+ALTER TABLE member ADD PRIMARY KEY (user_id);
 
 --table des admins herite de users
 CREATE TABLE admins (
@@ -62,6 +66,8 @@ CREATE TABLE tickets (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Date de création du billet
 );
 
+Alter Table tickets ADD member_id INT NOT NULL REFERENCES member (user_id) ON DELETE CASCADE;
+
 
 -- creation de table des paiements
 CREATE TABLE payments (
@@ -90,3 +96,53 @@ CREATE TABLE notifications (
 );
 
 
+
+-- Insert 3 users into the 'users' table
+INSERT INTO admins (email, password, role, full_name)
+VALUES
+    ('john.doe@example.com', 'password123', 'participant', 'John Doe'),
+    ('jane.smith@example.com', 'securepassword', 'organizer', 'Jane Smith'),
+    ('admin.user@example.com', 'adminpassword', 'admin', 'Admin User');
+
+
+-- Insert 3 founders into the 'founder' table
+INSERT INTO founder (bio, user_id, email, password, role, full_name)
+VALUES
+    ('Founder of Tech Innovations, passionate about AI and startups.', 1, 'tech.founder@example.com', 'techpassword', 'organizer', 'Alice Thompson'),
+    ('Experienced in event management, loves organizing large conferences.', 2, 'event.maker@example.com', 'eventpassword', 'organizer', 'Bob Johnson'),
+    ('Entrepreneur with over 10 years of experience in the entertainment industry.', 3, 'entertainment.founder@example.com', 'entertainmentpassword', 'organizer', 'Charlie Lee');
+
+
+
+INSERT INTO categories (name, description)
+VALUES
+    ('Music', 'Events related to music performances, concerts, and festivals.'),
+    ('Technology', 'Events focusing on technology, innovation, and development.'),
+    ('Education', 'Workshops, seminars, and conferences for educational purposes.'),
+    ('Art', 'Art exhibitions, galleries, and creative workshops.'),
+    ('Food & Drink', 'Events related to food festivals, tastings, and cooking classes.'),
+    ('Sports', 'Sports events, tournaments, and physical activities.'),
+    ('Health & Wellness', 'Events focused on fitness, health, and well-being.'),
+    ('Business', 'Business conferences, networking events, and professional gatherings.');
+
+
+-- Insert data into the 'events' table
+INSERT INTO events (title, description, date, location, category_id, capacity, price, founder_id)
+VALUES
+    ('Rock Concert 2025', 'A live performance by popular rock bands.', '2025-06-15 20:00:00', 'Madison Square Garden, NYC', 1, 500, 100.00, 1),
+    ('Tech Innovations Expo', 'Explore the latest in tech, gadgets, and innovation.', '2025-07-10 09:00:00', 'Silicon Valley Convention Center', 2, 100, 150.00, 2),
+    ('AI in Education Conference', 'Discussing the role of AI in transforming education.', '2025-08-20 10:00:00', 'Harvard University', 3, 300, 75.00, 3),
+    ('Art Gala 2025', 'An exclusive art exhibition featuring renowned artists.', '2025-09-25 18:00:00', 'The Louvre, Paris', 4, 200, 250.00, 3),
+    ('International Food Festival', 'Experience food from around the world.', '2025-10-05 12:00:00', 'Berlin City Center', 5, 200, 40.00, 1),
+    ('Summer Basketball Tournament', 'A thrilling basketball tournament with top teams.', '2025-11-01 14:00:00', 'Los Angeles Sports Arena', 6, 150, 25.00, 2),
+    ('Yoga and Wellness Retreat', 'A relaxing weekend focused on yoga and wellness.', '2025-12-12 08:00:00', 'Bali Retreat Center', 7, 100, 300.00, 3),
+    ('Global Business Summit', 'Networking and keynotes from the world top business leaders.', '2026-01-18 09:00:00', 'New York Hilton', 8, 400, 500.00, 2);
+
+
+-- Insert tickets
+INSERT INTO tickets (event_id, ticket_type, price, capacity, available, start_date, end_date, member_id)
+VALUES
+    (30, 'gratuite', NULL, 500, 500, '2025-01-01 00:00:00', '2025-06-15 20:00:00', 16),  -- Free tickets
+    (32, 'payant', 100.00, 1000, 1000, '2025-01-01 00:00:00', '2025-06-15 20:00:00', 16),  -- Paid tickets
+    (33, 'payant', 250.00, 100, 100, '2025-01-01 00:00:00', '2025-06-15 20:00:00', 16),  -- VIP tickets
+    (32, 'payant', 75.00, 200, 200, '2025-01-01 00:00:00', '2025-06-01 00:00:00', 17);  -- Early Bird tickets
