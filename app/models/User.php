@@ -14,6 +14,7 @@ class User extends Model
      protected $email;
      protected $password;
      protected $role;
+     protected $avatar;
 
      protected static string $table = 'users'; // Define table name
 
@@ -92,12 +93,13 @@ class User extends Model
 
      private function update(): bool
      {
-          $sql = "UPDATE " . self::$table . " SET name = :name, email = :email WHERE id = :id";
+          $sql = "UPDATE " . self::$table . " SET avatar = :avatar, full_name = :full_name, email = :email WHERE user_id = :user_id";
           $stmt = self::db()->prepare($sql);
           return $stmt->execute([
-               ':id' => $this->id,
-               ':name' => $this->username,
-               ':email' => $this->email
+               ':user_id' => $this->id,
+               ':full_name' => $this->username,
+               ':email' => $this->email,
+               ':avatar' => $this->avatar
           ]);
      }
 
@@ -111,11 +113,53 @@ class User extends Model
           return $result ?: false;
      }
 
+     static public function findById(int $id)
+     {
+          $sql = "SELECT * FROM " . self::$table . " WHERE user_id = :user_id";
+          $stmt = self::db()->prepare($sql);
+          $stmt->execute([':user_id' => $id]);
+          $result = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+          return $result ?: false;
+     }
+
 
      static public function deleteUser($id)
      {
-          $sql = "DELETE FROM " . self::$table . " WHERE id = :id";
+          $sql = "DELETE FROM " . self::$table . " WHERE user_id = :user_id";
           $stmt = self::db()->prepare($sql);
-          return $stmt->execute([':id' => $id]);
+          return $stmt->execute([':user_id' => $id]);
+     }
+
+     public static function findMemberData($userId) {
+          $db = self::db();
+          $stmt = $db->prepare('SELECT phone_number, address FROM member WHERE user_id = ?');
+          $stmt->execute([$userId]);
+          return $stmt->fetch();
+     }
+
+     public static function findFounderData($userId) {
+          $db = self::db();
+          $stmt = $db->prepare('SELECT bio FROM founder WHERE user_id = ?');
+          $stmt->execute([$userId]);
+          return $stmt->fetch();
+     }
+
+     public static function updateMemberData($userId, $phone_number, $address) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE member SET phone_number = ?, address = ? WHERE user_id = ?');
+          return $stmt->execute([$phone_number, $address, $userId]);
+     }
+
+     public static function updateFounderData($userId, $bio) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE founder SET bio = ? WHERE user_id = ?');
+          return $stmt->execute([$bio, $userId]);
+     }
+
+     public function updateFullName($full_name) {
+          $db = self::db();
+          $stmt = $db->prepare('UPDATE users SET full_name = ? WHERE user_id = ?');
+          return $stmt->execute([$full_name, $this->id]); // Note: changed this->user_id to this->id
      }
 }
